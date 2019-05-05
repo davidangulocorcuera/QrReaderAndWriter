@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,39 +19,41 @@ import kotlinx.android.synthetic.main.fragment_reader.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 
+
+
 class ReaderFragment : Fragment(), ZXingScannerView.ResultHandler {
     lateinit var scanner: ZXingScannerView
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        scanner = ZXingScannerView(context)
+        scanner = ZXingScannerView(activity)
         return scanner
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestPermission()
-    }
-
-    override fun onResume() {
-        super.onResume()
         if (checkPermissions()){
-            scanner = ZXingScannerView(context)
+            scanner = ZXingScannerView(activity)
+            scanner.setResultHandler(this)
+            scanner.startCamera()
 
         }
         else{
             requestPermission()
         }
+
     }
 
+
     fun checkPermissions(): Boolean{
-        return (context?.let { ContextCompat.checkSelfPermission(it, android.Manifest.permission.CAMERA) }
+        return (context?.let { ContextCompat.checkSelfPermission(it, CAMERA) }
                 == PackageManager.PERMISSION_GRANTED)
 
     }
-
 
 
     fun requestPermission(){
@@ -84,6 +85,8 @@ class ReaderFragment : Fragment(), ZXingScannerView.ResultHandler {
     companion object {
         const val REQUEST_CAMERA = 1
     }
+
+
 
 
 }

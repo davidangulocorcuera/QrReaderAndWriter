@@ -45,17 +45,17 @@ class WriterFragment : Fragment() {
             // Unsupported format
             return null
         }
-        val w = result.width
-        val h = result.height
-        val pixels = IntArray(w * h)
-        for (y in 0 until h) {
-            val offset = y * w
-            for (x in 0 until w) {
+        val width = result.width
+        val height = result.height
+        val pixels = IntArray(width * height)
+        for (y in 0 until height) {
+            val offset = y * width
+            for (x in 0 until width) {
                 pixels[offset + x] = if (result.get(x, y)) Color.BLACK else Color.WHITE
             }
         }
-        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        bitmap.setPixels(pixels, 0, 400, 0, 0, w, h)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        bitmap.setPixels(pixels, 0, 400, 0, 0, width, height)
         return bitmap
     }
 
