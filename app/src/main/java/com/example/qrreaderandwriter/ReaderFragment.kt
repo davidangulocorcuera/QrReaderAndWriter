@@ -11,9 +11,11 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.fragment_reader.view.*
@@ -22,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_reader.view.*
 class ReaderFragment : Fragment() {
 
     var mutableUrl = MutableLiveData<String>()
-
+    lateinit var tvQr: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,23 +35,25 @@ class ReaderFragment : Fragment() {
 
      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+         tvQr = view.findViewById(R.id.tvBarcode)
+
          view.btnScan.setOnClickListener {
              if (checkPermissions()) {
                  initializeBarcodeScan()
+                 mutableUrl.observe(this, Observer<String> { url -> view.tvBarcode.text = url })
+
              } else {
                  requestPermission()
+                 initializeBarcodeScan()
              }
          }
-         val observerUrl: Observer<String>  =  object: Observer<String> {
-             override fun onChanged(url: String?) {
-                 view.tvBarcode.text = url
-             }
-         }
-         mutableUrl.observe(this, observerUrl)
+
 
      }
+
+
     private fun initializeBarcodeScan() {
-        val integrator = IntentIntegrator(activity)
+        val integrator = IntentIntegrator.forSupportFragment(this)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
         integrator.setPrompt("Apunta al qr")
         integrator.setOrientationLocked(true)
@@ -61,6 +65,10 @@ class ReaderFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent)
         mutableUrl.postValue(scanResult.contents.toString())
+        Log.v("taag",scanResult.contents.toString())
+        Log.v("taag",resultCode.toString())
+
+        tvQr.text = scanResult.contents.toString()
     }
 
 

@@ -3,11 +3,10 @@ package com.example.qrreaderandwriter
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.google.zxing.integration.android.IntentIntegrator
 
 
-
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(){
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +23,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        ReaderFragment().onActivityResult(requestCode,resultCode,intent)
-    }
+
 
 }
