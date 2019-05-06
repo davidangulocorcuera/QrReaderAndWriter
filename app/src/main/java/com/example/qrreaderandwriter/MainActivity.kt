@@ -1,9 +1,13 @@
 package com.example.qrreaderandwriter
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
+
+
 class MainActivity : AppCompatActivity() {
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,4 +24,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        ReaderFragment().onActivityResult(requestCode,resultCode,intent)
+    }
+
 }

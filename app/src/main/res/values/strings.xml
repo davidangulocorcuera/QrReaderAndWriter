@@ -3,4 +3,5 @@
     <string name="write_url">Escribe lel texto para crear el qr</string>
     <string name="create">Crear</string>
     <string name="read_qr">Leer QR</string>
+    <string name="scan">ESCANEAR</string>
 </resources>
