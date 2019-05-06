@@ -22,32 +22,32 @@ import kotlinx.android.synthetic.main.fragment_reader.view.*
 class ReaderFragment : Fragment() {
 
     var mutableUrl = MutableLiveData<String>()
-    lateinit var observerUrl: Observer<String>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_reader, container, false).also { view ->
-             observerUrl =  object: Observer<String> {
-                override fun onChanged(url: String?) {
-                    view.tvBarcode.text = url
-                }
-            }
-            mutableUrl.observe(this, observerUrl)
-
-            view.btnScan.setOnClickListener {
-                if (checkPermissions()) {
-                    initializeBarcodeScan()
-                } else {
-                    requestPermission()
-                }
-            }
-
-        }
+        return inflater.inflate(R.layout.fragment_reader, container, false)
     }
 
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+         view.btnScan.setOnClickListener {
+             if (checkPermissions()) {
+                 initializeBarcodeScan()
+             } else {
+                 requestPermission()
+             }
+         }
+         val observerUrl: Observer<String>  =  object: Observer<String> {
+             override fun onChanged(url: String?) {
+                 view.tvBarcode.text = url
+             }
+         }
+         mutableUrl.observe(this, observerUrl)
 
+     }
     private fun initializeBarcodeScan() {
         val integrator = IntentIntegrator(activity)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
